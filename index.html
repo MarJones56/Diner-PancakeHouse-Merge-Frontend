@@ -6,6 +6,55 @@
     <title>Document</title>
 </head>
 <body>
+
+    <h1>Menu</h1>
+    <ul id="menuList"></ul>
+
+    <script>
+        let menu = [];
+        let host = "http://localhost:8080";
+
+        if (menu.length == 0){
+            get();
+        }
+
+        async function get(){
+            menu = await getMenu();
+            displayMenu(menu);
+        }
+
+        async function getMenu(){
+            let request = {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+
+                let response = await fetch(host + "/merger", request);
+                let result = await response.json()
+                return result;
+        }
+
+        function displayMenu(menu) {
+            const menuList = document.getElementById('menuList');
+
+            menuList.innerHTML = '';
+
+            menu.forEach(item => {
+                const menuItem = document.createElement('li');
+                const htmlContent = `
+                    <h4>${item.name}</h4>
+                    <p>${item.description}</p>
+                    <p>Price: $${item.price}</p>
+                    <p>Vegetarian: ${item.vegetarian ? 'Yes' : 'No'}</p>
+                    `;
+                menuItem.innerHTML = htmlContent;
+                menuList.appendChild(menuItem);
+    });
+}
+
+    </script>
     
 </body>
 </html>
